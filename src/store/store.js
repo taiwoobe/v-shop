@@ -11,7 +11,7 @@ export default new Vuex.Store({
     checkoutStatus: null
   },
   actions: { // = methods
-    fetchProdcts({commit}) {
+    fetchProducts({commit}) {
       return new Promise((resolve, reject) => {
         shop.getProducts(products => {
           commit('setProducts', products);
@@ -19,18 +19,18 @@ export default new Vuex.Store({
         })
       })
     },
-    addProductToCart(context, product) {
+    addProductToCart({state, commit, getters}, product) {
       // first we check if product is available
-      if (product.inventory > 0) {
+      if (getters.productIsInStock(product)) {
         // next we check if product is already in cart
-        let cartItem = context.state.cart.find(item => item.id === product.id);
+        let cartItem = state.cart.find(item => item.id === product.id);
         if (!cartItem) {
-          context.commit('pushProductToCart', product.id);
+          commit('pushProductToCart', product.id);
         } else {
-          context.commit('incrementItemQuantity', cartItem);
+          commit('incrementItemQuantity', cartItem);
         }
         // create a mutation to always reduce product inventory when added to cart
-        context.commit('decrementProductInventory', product);
+        commit('decrementProductInventory', product);
       } else {
         // show out of stock message to the user
         console.log('Product is out of stock');
@@ -71,6 +71,11 @@ export default new Vuex.Store({
       return total;
       // Using the reduce method for the same result above
       // return getters.cartTotal.reduce((total, product) =>  total + product.price * product.quantity, 0);
+    },
+    productIsInStock() {
+      return (product) => {
+        return product.inventory > 0;
+      }
     }
   },
   mutations: { // = setting & updating the state
