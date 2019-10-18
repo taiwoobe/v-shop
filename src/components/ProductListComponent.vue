@@ -2,13 +2,14 @@
     <div>
         <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif" alt="Image Spinner">
         <ul v-else>
-            <li v-for="product in products" :key="product.id">{{ product.title }} - {{ product.price }}</li>
+            <li v-for="product in products" :key="product.id">{{ product.title }} - {{ product.price }} - {{ product.inventory }}
+                <button @click="addProductToCart(product)">Add to Cart </button>
+            </li>
         </ul>
     </div>
 </template>
 
 <script>
-import store from '@/store/store.js';
 export default {
     data() {
         return {
@@ -19,14 +20,19 @@ export default {
     computed: {
         products() {
             // return store.state.products;
-            return store.getters.availableProducts;
+            return this.$store.getters.availableProducts;
         }
     },
     created() {
         this.loading = true;
-        store.dispatch('fetchProdcts').then(() => {
+        this.$store.dispatch('fetchProdcts').then(() => {
             this.loading = false;
         });
+    },
+    methods: {
+        addProductToCart(product) {
+            this.$store.dispatch('addProductToCart', product);
+        }
     },
 }
 </script>
