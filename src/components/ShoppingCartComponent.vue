@@ -24,7 +24,7 @@ import {mapState, mapGetters, mapActions} from 'vuex';
         },
         methods: {
             ...mapActions(['checkout'])
-        },
+        }
     }
 </script>
 

@@ -36,7 +36,7 @@ export default {
             fetchProducts: 'fetchProducts',
             addProductToCart: 'addProductToCart'  
         })
-    },
+    }
 }
 </script>
 
