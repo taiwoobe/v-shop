@@ -13,13 +13,11 @@
 export default {
     data() {
         return {
-            // products: []
             loading: false
         }
     },
     computed: {
         products() {
-            // return store.state.products;
             return this.$store.getters.availableProducts;
         }
     },
