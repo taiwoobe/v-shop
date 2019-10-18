@@ -2,7 +2,7 @@
     <div>
         <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif" alt="Image Spinner">
         <ul v-else>
-            <li v-for="product in products" :key="product.id">{{ product.title }} - {{ product.price }} - {{ product.inventory }}
+            <li v-for="product in products" :key="product.id">{{ product.title }} - {{ product.price | currency }} - {{ product.inventory }}
                 <button @click="addProductToCart(product)">Add to Cart </button>
             </li>
         </ul>
