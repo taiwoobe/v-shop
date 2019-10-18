@@ -25,10 +25,8 @@ export default new Vuex.Store({
         let cartItem = context.state.cart.find(item => item.id === product.id);
         if (!cartItem) {
           context.commit('pushProductToCart', product.id);
-          console.log(cartItem)
         } else {
           context.commit('incrementItemQuantity', cartItem);
-          console.log(cartItem)
         }
         // create a mutation to always reduce product inventory when added to cart
         context.commit('decrementProductInventory', product);
@@ -41,6 +39,16 @@ export default new Vuex.Store({
   getters: { // = computed properties
     availableProducts(state, getters) {
       return state.products.filter(products => products.inventory > 0);
+    },
+    cartProducts(state) {
+      return state.cart.map(cartItem => {
+        const product = state.products.find(product => product.id === cartItem.id);
+        return {
+          title: product.title,
+          price: product.price,
+          quantity: cartItem.quantity
+        }
+      })
     }
   },
   mutations: { // = setting & updating the state
