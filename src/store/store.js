@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: { // = data
     products: [],
-    cart: []
+    cart: [],
+    checkoutStatus: null
   },
   actions: { // = methods
     fetchProdcts({commit}) {
@@ -34,6 +35,18 @@ export default new Vuex.Store({
         // show out of stock message to the user
         console.log('Product is out of stock');
       }
+    },
+    checkout({state, commit}) {
+      shop.buyProducts(
+        state.cart,
+        () => {
+          commit('emptyCart');
+          commit('setCheckoutStatus', 'success');
+        },
+        () => {
+          commit('setCheckoutStatus', 'failed');
+        }
+      )
     }
   },
   getters: { // = computed properties
@@ -75,6 +88,12 @@ export default new Vuex.Store({
     },
     decrementProductInventory(state, product) {
       product.inventory--;
+    },
+    emptyCart(state) {
+      state.cart = [];
+    },
+    setCheckoutStatus(state, status) {
+      state.checkoutStatus = status;
     }
   }
 })
